@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const messageSchema = new Schema({
+const messageSchema = new mongoose.Schema({
     conversationId: {
         type: String,
         required: true,

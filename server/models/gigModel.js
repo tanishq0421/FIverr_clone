@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const gigSchema = new Schema({
+const gigSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,

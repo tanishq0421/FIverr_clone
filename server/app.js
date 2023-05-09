@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 const userRouter = require('./routes/userRoutes');
 const conversationRouter = require('./routes/conversationRoute');
@@ -13,6 +14,7 @@ const authRouter = require('./routes/authRoute');
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 console.log(process.env.NODE_ENV);
@@ -20,13 +22,19 @@ if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
 
-// app.use('/api/v1/user', userRouter);
-// app.use('/api/v1/order', orderRouter);
-// app.use('/api/v1/gig', gigRouter);
-// app.use('/api/v1/message', messageRouter);
-// app.use('/api/v1/conversation', conversationRouter);
-// app.use('/api/v1/reviews', reviewRouter);
+app.use((err, req, res, next) => {
+    const errorStatus = err.status || 500
+    const errorMessage = err.Message || "Something went wrong";
+
+    return res.status(errorStatus).json({
+        status: "success",
+        error: {
+            errorMessage 
+        } 
+    })
+})
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
 
 
 

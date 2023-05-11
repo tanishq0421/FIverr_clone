@@ -15,7 +15,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({origin: "http://localhost:5173", credential: true}));
 
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'development'){

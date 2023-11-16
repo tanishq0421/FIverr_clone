@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const createError = require('./../utils/createError');
 
 exports.register = async(req, res, next) => {
     try{
@@ -16,23 +17,16 @@ exports.register = async(req, res, next) => {
             }
         });
     }catch(err){
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        });
+        next(err);
    }
-   next();
+   
 }
 
 exports.login = async(req, res, next) => {
     try{
         const user = await User.findOne({username: req.body.username});
-        if(!user){
-            return res.status(404).json({
-                status: 'fail',
-                message: "User not found"
-            });
-        }
+        if(!user)return next(createError(404, "User not found!"));
+    
         const isCorrect = bcrypt.compareSync(req.body.password, user.password);
             if(!isCorrect){
                 return res.status(400).json({
@@ -62,4 +56,16 @@ exports.login = async(req, res, next) => {
             message: err
         });
     }
+};
+
+exports.logout = async(req, res, next)  => {
+    res.clearCookie("accessToken", {
+        sameSite: "none",
+        secure: true,
+    })
+    .status(200)
+    .json({
+        status: "success",
+        message: "User has been logged out"
+    });
 }

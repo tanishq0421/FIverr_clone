@@ -15,12 +15,20 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({origin: "http://localhost:5173", credential: true}));
 
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
+
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
+app.use('api/v1/gigs', gigRouter);
+app.use('api/v1/orders', orderRouter);
+app.use('api/v1/reviews', reviewRouter);
+app.use('api/v1/messages', messageRouter);
+app.use('api/v1/conversations', conversationRouter);
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
@@ -33,10 +41,6 @@ app.use((err, req, res, next) => {
         } 
     })
 })
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/user', userRouter);
-
-
 
 
 module.exports = app;

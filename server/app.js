@@ -22,6 +22,14 @@ if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
 
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
+app.use('api/v1/gigs', gigRouter);
+app.use('api/v1/orders', orderRouter);
+app.use('api/v1/reviews', reviewRouter);
+app.use('api/v1/messages', messageRouter);
+app.use('api/v1/conversations', conversationRouter);
+
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     const errorMessage = err.Message || "Something went wrong";
@@ -33,10 +41,6 @@ app.use((err, req, res, next) => {
         } 
     })
 })
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/user', userRouter);
-
-
 
 
 module.exports = app;

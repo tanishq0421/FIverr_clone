@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import newRequest from "../../utils/newRequest";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.scss";
 
 function Navbar() {
@@ -20,18 +19,12 @@ function Navbar() {
     };
   }, []);
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  // const currentUser = null
 
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await newRequest.post("/auth/logout");
-      localStorage.setItem("currentUser", null);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
+  const currentUser = {
+    id: 1,
+    username: "Anna",
+    isSeller: true,
   };
 
   return (
@@ -39,46 +32,47 @@ function Navbar() {
       <div className="container">
         <div className="logo">
           <Link className="link" to="/">
-            <span className="text">fiverr</span>
+            <span className="text">liverr</span>
           </Link>
           <span className="dot">.</span>
         </div>
         <div className="links">
-          <span>Fiverr Business</span>
+          <span>Liverr Business</span>
           <span>Explore</span>
           <span>English</span>
           {!currentUser?.isSeller && <span>Become a Seller</span>}
           {currentUser ? (
-            <div className="user" onClick={() => setOpen(!open)}>
-              <img src={currentUser.img || "/img/noavatar.jpg"} alt="" />
+            <div className="user" onClick={()=>setOpen(!open)}>
+              <img
+                src="https://images.pexels.com/photos/1115697/pexels-photo-1115697.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                alt=""
+              />
               <span>{currentUser?.username}</span>
-              {open && (
-                <div className="options">
-                  {currentUser.isSeller && (
-                    <>
-                      <Link className="link" to="/mygigs">
-                        Gigs
-                      </Link>
-                      <Link className="link" to="/add">
-                        Add New Gig
-                      </Link>
-                    </>
-                  )}
-                  <Link className="link" to="/orders">
-                    Orders
-                  </Link>
-                  <Link className="link" to="/messages">
-                    Messages
-                  </Link>
-                  <Link className="link" onClick={handleLogout}>
-                    Logout
-                  </Link>
-                </div>
-              )}
+              {open && <div className="options">
+                {currentUser.isSeller && (
+                  <>
+                    <Link className="link" to="/mygigs">
+                      Gigs
+                    </Link>
+                    <Link className="link" to="/add">
+                      Add New Gig
+                    </Link>
+                  </>
+                )}
+                <Link className="link" to="/orders">
+                  Orders
+                </Link>
+                <Link className="link" to="/messages">
+                  Messages
+                </Link>
+                <Link className="link" to="/">
+                  Logout
+                </Link>
+              </div>}
             </div>
           ) : (
             <>
-              <Link to="/login" className="link">Sign in</Link>
+              <span>Sign in</span>
               <Link className="link" to="/register">
                 <button>Join</button>
               </Link>
